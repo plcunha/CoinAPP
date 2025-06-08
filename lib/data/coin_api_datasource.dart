@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class CoinApiDataSource {
   static const String _baseUrl =
-      'https://cors-anywhere.herokuapp.com/https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest';
+      'https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest';
   static const String _apiKey = 'f73191dd-879b-4173-89f2-24ada3a0d995';
   static const Duration _timeout = Duration(seconds: 30);
 
