@@ -5,7 +5,10 @@ import 'package:http/http.dart' as http;
 class CoinApiDataSource {
   static const String _baseUrl =
       'https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest';
-  static const String _apiKey = 'f73191dd-879b-4173-89f2-24ada3a0d995';
+  static const String _apiKey = String.fromEnvironment(
+    'CMC_API_KEY',
+    defaultValue: '',
+  );
   static const Duration _timeout = Duration(seconds: 30);
 
   final http.Client _client;
@@ -33,6 +36,13 @@ class CoinApiDataSource {
         'convert': 'BRL',
       },
     );
+
+    if (_apiKey.isEmpty) {
+      throw CoinApiException(
+        'API key not configured. '
+        'Run with: --dart-define=CMC_API_KEY=your_key',
+      );
+    }
 
     try {
       final response = await _client.get(

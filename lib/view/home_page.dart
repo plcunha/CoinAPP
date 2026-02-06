@@ -1,5 +1,6 @@
 import 'package:coin_aplication/view/coin_details.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../viewmodel/coin_viewmodel.dart';
 
@@ -187,7 +188,15 @@ class HomePage extends StatelessWidget {
                       itemCount: vm.cryptos.length,
                       itemBuilder: (_, i) {
                         final c = vm.cryptos[i];
-                        final isPositive = c.priceBrl > 0;
+                        final isPositive = c.percentChange24h >= 0;
+                        final usdFormat = NumberFormat.currency(
+                          symbol: '\$',
+                          decimalDigits: 2,
+                        );
+                        final brlFormat = NumberFormat.currency(
+                          symbol: 'R\$',
+                          decimalDigits: 2,
+                        );
 
                         return Container(
                           margin: const EdgeInsets.only(bottom: 12),
@@ -248,13 +257,55 @@ class HomePage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(height: 4),
-                                Text(
-                                  c.symbol,
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      c.symbol,
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 6,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: isPositive
+                                            ? Colors.green[50]
+                                            : Colors.red[50],
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            isPositive
+                                                ? Icons.arrow_upward
+                                                : Icons.arrow_downward,
+                                            size: 12,
+                                            color: isPositive
+                                                ? Colors.green[700]
+                                                : Colors.red[700],
+                                          ),
+                                          const SizedBox(width: 2),
+                                          Text(
+                                            '${c.percentChange24h.abs().toStringAsFixed(2)}%',
+                                            style: TextStyle(
+                                              color: isPositive
+                                                  ? Colors.green[700]
+                                                  : Colors.red[700],
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(height: 8),
                                 Row(
@@ -269,7 +320,7 @@ class HomePage extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: Text(
-                                        'USD \$${c.priceUsd.toStringAsFixed(2)}',
+                                        'USD ${usdFormat.format(c.priceUsd)}',
                                         style: TextStyle(
                                           color: Colors.green[700],
                                           fontSize: 12,
@@ -288,7 +339,7 @@ class HomePage extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: Text(
-                                        'BRL R\$${c.priceBrl.toStringAsFixed(2)}',
+                                        'BRL ${brlFormat.format(c.priceBrl)}',
                                         style: TextStyle(
                                           color: Colors.blue[700],
                                           fontSize: 12,

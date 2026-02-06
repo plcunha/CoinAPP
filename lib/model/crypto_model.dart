@@ -3,6 +3,7 @@ class Crypto {
   final String symbol;
   final double priceUsd;
   final double priceBrl;
+  final double percentChange24h;
   final String dateAdded;
 
   Crypto({
@@ -10,6 +11,7 @@ class Crypto {
     required this.symbol,
     required this.priceUsd,
     required this.priceBrl,
+    required this.percentChange24h,
     required this.dateAdded,
   });
 
@@ -23,6 +25,7 @@ class Crypto {
       symbol: json['symbol'] ?? 'N/A',
       priceUsd: (usd['price'] ?? 0.0).toDouble(),
       priceBrl: (brl['price'] ?? 0.0).toDouble(),
+      percentChange24h: (usd['percent_change_24h'] ?? 0.0).toDouble(),
       dateAdded: json['date_added'] ?? 'N/A',
     );
   }

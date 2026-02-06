@@ -8,7 +8,6 @@ class CoinRepository {
 
   Future<List<Crypto>> getCryptos(List<String> symbols) async {
     final data = await dataSource.fetchCoins(symbols);
-    print('Dados recebidos da API: $data');
 
     final List<Crypto> result = [];
 
@@ -17,11 +16,9 @@ class CoinRepository {
         try {
           final crypto = Crypto.fromJson(list.first);
           result.add(crypto);
-        } catch (e) {
-          print('Erro ao converter $symbol: $e');
+        } catch (_) {
+          // Skip entries that fail to parse
         }
-      } else {
-        print("Lista vazia para $symbol");
       }
     });
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../model/crypto_model.dart';
 
 class CoinDetails extends StatelessWidget {
@@ -146,7 +147,10 @@ class CoinDetails extends StatelessWidget {
                   iconColor: Colors.green[600]!,
                   iconBackground: Colors.green[50]!,
                   title: 'Preço em USD',
-                  value: '\$${crypto.priceUsd.toStringAsFixed(4)}',
+                  value: NumberFormat.currency(
+                    symbol: '\$',
+                    decimalDigits: 4,
+                  ).format(crypto.priceUsd),
                   valueColor: Colors.green[700]!,
                   isFirst: true,
                 ),
@@ -156,8 +160,29 @@ class CoinDetails extends StatelessWidget {
                   iconColor: Colors.blue[600]!,
                   iconBackground: Colors.blue[50]!,
                   title: 'Preço em BRL',
-                  value: 'R\$${crypto.priceBrl.toStringAsFixed(2)}',
+                  value: NumberFormat.currency(
+                    symbol: 'R\$',
+                    decimalDigits: 2,
+                  ).format(crypto.priceBrl),
                   valueColor: Colors.blue[700]!,
+                ),
+                _buildDivider(),
+                _buildPriceItem(
+                  icon: crypto.percentChange24h >= 0
+                      ? Icons.trending_up
+                      : Icons.trending_down,
+                  iconColor: crypto.percentChange24h >= 0
+                      ? Colors.green[600]!
+                      : Colors.red[600]!,
+                  iconBackground: crypto.percentChange24h >= 0
+                      ? Colors.green[50]!
+                      : Colors.red[50]!,
+                  title: 'Variação 24h',
+                  value:
+                      '${crypto.percentChange24h >= 0 ? '+' : ''}${crypto.percentChange24h.toStringAsFixed(2)}%',
+                  valueColor: crypto.percentChange24h >= 0
+                      ? Colors.green[700]!
+                      : Colors.red[700]!,
                 ),
                 _buildDivider(),
                 _buildPriceItem(
