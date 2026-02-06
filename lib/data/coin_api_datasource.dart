@@ -16,6 +16,13 @@ class CoinApiDataSource {
   CoinApiDataSource({http.Client? client}) : _client = client ?? http.Client();
 
   Future<Map<String, dynamic>> fetchCoins(List<String> symbols) async {
+    if (_apiKey.isEmpty) {
+      throw CoinApiException(
+        'API key not configured. '
+        'Run with: --dart-define=CMC_API_KEY=your_key',
+      );
+    }
+
     if (symbols.isEmpty) {
       throw ArgumentError('Symbols list cannot be empty');
     }
@@ -36,13 +43,6 @@ class CoinApiDataSource {
         'convert': 'BRL',
       },
     );
-
-    if (_apiKey.isEmpty) {
-      throw CoinApiException(
-        'API key not configured. '
-        'Run with: --dart-define=CMC_API_KEY=your_key',
-      );
-    }
 
     try {
       final response = await _client.get(
